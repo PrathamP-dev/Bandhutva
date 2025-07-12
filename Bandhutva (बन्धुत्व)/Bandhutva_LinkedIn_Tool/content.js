@@ -1,6 +1,10 @@
 console.log("Bandhutva script loaded.");
 
-// Function to add the control bar
+// Check if we're on supported pages
+function isOnSupportedPage() {
+  return location.href.includes("/mynetwork/invitation-manager/") || location.href.includes("/mynetwork/grow/");
+}
+
 function addBulkControls() {
   if (document.getElementById("bulk-controls")) return;
 
@@ -50,12 +54,8 @@ function addBulkControls() {
   controlBar.appendChild(acceptButton);
   controlBar.appendChild(rejectButton);
 
-  const managerContainer = document.querySelector(".mn-invitation-manager__container, .mn-grow-discovery-list__cards");
   const mainContainer = document.querySelector("main");
-
-  if (managerContainer) {
-    managerContainer.prepend(controlBar);
-  } else if (mainContainer) {
+  if (mainContainer) {
     mainContainer.prepend(controlBar);
   }
 
@@ -70,6 +70,7 @@ function addBulkControls() {
 
 function addCheckboxes() {
   const invitations = document.querySelectorAll(".invitation-card, .discover-entity-type-card");
+
   invitations.forEach(invite => {
     if (invite.querySelector(".bulk-select")) return;
 
@@ -78,13 +79,14 @@ function addCheckboxes() {
     checkbox.className = "bulk-select animated-checkbox";
     checkbox.style.marginRight = "8px";
 
-    // Try finding a reliable container inside each invitation card
-    const cardHeader = invite.querySelector(".entity-result__content, .discover-person-card__name, .artdeco-entity-lockup__title");
+    const header = invite.querySelector(".entity-result__content") ||
+                   invite.querySelector(".discover-person-card__name") ||
+                   invite.querySelector(".artdeco-entity-lockup__title") ||
+                   invite.querySelector("span"); // fallback
 
-    if (cardHeader) {
-      cardHeader.prepend(checkbox);
+    if (header) {
+      header.prepend(checkbox);
     } else {
-      // If not found, prepend at top of card
       invite.prepend(checkbox);
     }
   });
@@ -101,27 +103,42 @@ function handleBulkAction(action) {
 
     if (action === "accept" && acceptButton) {
       acceptButton.click();
-      cb.checked = false;
     } else if (action === "reject" && rejectButton) {
       rejectButton.click();
-      cb.checked = false;
     }
+    cb.checked = false;
   });
 
   const selectAll = document.getElementById("select-all");
   if (selectAll) selectAll.checked = false;
 }
 
-function initObserver() {
-  const observer = new MutationObserver(() => {
-    addCheckboxes();
-    addBulkControls();
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
+function debounce(func, wait = 300) {
+  let timeout;
+  return () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(func, wait);
+  };
 }
 
-// Styling for buttons & checkboxes
+function setupObserver() {
+  const observer = new MutationObserver(debounce(() => {
+    if (isOnSupportedPage()) {
+      addBulkControls();
+      addCheckboxes();
+    }
+  }, 500));
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // Initial run
+  if (isOnSupportedPage()) {
+    addBulkControls();
+    addCheckboxes();
+  }
+}
+
+// Styling
 const style = document.createElement("style");
 style.innerHTML = `
   @keyframes fadeIn {
@@ -182,4 +199,4 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
-initObserver();
+setupObserver();
