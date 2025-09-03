@@ -102,9 +102,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 📣 Connect & Contribute  
 
-Found a bug? Got a feature idea? Open an issue or submit a pull request — contributions are welcome!
-
-f775a5746e8f446cb86a2d0fffdb66ca 
+Found a bug? Got a feature idea? Open an issue or submit a pull request — contributions are welcome! 
 
 ---
 
