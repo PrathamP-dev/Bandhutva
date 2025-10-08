@@ -85,12 +85,14 @@
 
 ## 🚀 Public Release  
 
-Bandhutva is now officially live on the **Firefox Add-ons Store!** 🎉  
+Bandhutva is now officially live on the **Firefox Add-ons Store! & Microsoft Add-ons Store!** 🎉  
 You can install it directly from the link below:
 
 👉 [**Download Bandhutva for Firefox**](https://addons.mozilla.org/en-US/firefox/addon/bandhutva/)
 
-> *Note: This public release is for Firefox users. Chrome and Brave users can continue to install it manually via the local setup guide above.*
+👉 [**Download Bandhutva for Microsoft Edge**](https://microsoftedge.microsoft.com/addons/detail/bandhutva/holdnfdoggehnkgemgbmbbjnomolffke)
+
+> *Note: This public release is for Firefox & Edge users. Chrome and Brave users can continue to install it manually via the local setup guide above.*
 
 ---
 
